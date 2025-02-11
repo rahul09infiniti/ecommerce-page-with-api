@@ -1,0 +1,99 @@
+.icon-hover:hover {
+  border-color: #3b71ca;
+  background-color: white;
+  color: #3b71ca;
+}
+
+.icon-hover:hover i {
+  color: #3b71ca !important;
+}
+.suggestion-list {
+max-height: 200px;
+overflow-y: auto;
+border-radius: 0.25rem;
+position: absolute;
+
+}
+
+.list-unstyled a{
+  text-decoration:  none;
+  /* color: rgb(80, 187, 229); */
+  color: #04a9f5;
+}
+
+
+.text-uppercase{
+  /* color: rgb(80, 187, 229); */
+  color: #033143;
+}
+.sticky-header{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10; 
+  background-color: white;
+  width: 100%;
+}
+
+/* .gradient-custom {
+  background: #6a11cb;
+  
+  background: -webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
+  
+  background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1))
+  } */
+
+  button.checkout{
+    border: none;
+    background-color: #04a9f5 !important;
+  } 
+
+
+
+/* .modal-content {
+  background-color: #fff;
+  transition: transform 0.3s ease-out;
+} */
+
+/* .modal-content .btn-close {
+  color: #007bff;
+}  */
+
+.cart-item {
+  transition: background-color 0.2s ease;
+}
+
+.cart-item:hover {
+  background-color: #f1f1f1;
+}
+
+/* .cart-item-quantity input {
+  font-size: 1.1rem;
+  padding: 5px;
+} */
+
+.remove-item button:hover {
+  background-color: #dc3545;
+}
+
+/* .modal-footer button:hover {
+  background-color: #0056b3;
+  color: #fff;
+} */
+ a.nav-link:hover{
+  text-decoration: none;
+  color: white !important;
+  background-color: #04a9f5 !important;
+}
+
+.background-fade {
+  background-color: rgba(36, 36, 36, 0.513); /* Semi-transparent */
+  transition: background-color 0.3s ease;
+}
+
+.icon-hover:hover{
+  color: #04a9f5 !important ;
+}
+
+
