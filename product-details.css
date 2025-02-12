@@ -83,8 +83,8 @@ position: absolute;
 } */
  a.nav-link:hover{
   text-decoration: none;
-  color: white !important;
-  background-color: #04a9f5 !important;
+  /* color: white !important; */
+  /* background-color: #04a9f5 !important; */
 }
 
 .background-fade {
@@ -96,4 +96,17 @@ position: absolute;
   color: #04a9f5 !important ;
 }
 
+/* .info.similar-nav:hover{
+  color: black !important;
 
+  background-color: transparent !important;
+} */
+
+.no-hover-background:hover {
+  background-color: transparent !important;
+}
+
+.similar-product:hover{
+  cursor: pointer !important;
+  background-color:#f1f1f1 !important;
+}

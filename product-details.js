@@ -14,6 +14,9 @@ const app = Vue.createApp({
             myCartVisible : false,
             myWishListVisible : false,
             isInWishList : false,
+            showAlertModal: false,
+            modalMessage : '',
+            similarProducts : [],
         }
     },
 
@@ -57,6 +60,9 @@ const app = Vue.createApp({
                 const response = await fetch(`https://dummyjson.com/products/${this.productId}`)
                 const data = await response.json();
                 this.productInfo = data;
+                console.log("my product",this.productInfo);
+                await this.getSimilarProduct();
+                
                 this.checkProductInCartForAdded();
                 this.checkProductInWishList();
 
@@ -224,7 +230,6 @@ const app = Vue.createApp({
 
                     cart.push(cartItem);
                     this.cart = cart; 
-                    alert("Product Added in the cart")
                     this.saveToLocalStorage();
                     this.checkProductInCartForAdded();
                     
@@ -233,7 +238,6 @@ const app = Vue.createApp({
                 }else{
                     existingProduct.quantity = this.placeholder;  
                     this.cart = cart;
-                    alert("Product quantity updated in the cart");
                     this.saveToLocalStorage();
                     this.checkProductInCartForAdded();
                 }
@@ -257,7 +261,6 @@ const app = Vue.createApp({
                     }
                     wishList.push(wishListItem);
                     this.wishList = wishList;
-                    alert("Product Added in the WishList")
                     this.saveToLocalStorage();
                     this.isInWishList = true;
                     this.saveButtonText  = "Saved";
@@ -303,89 +306,141 @@ const app = Vue.createApp({
             }
         },
 
-          saveToLocalStorage(){
+        saveToLocalStorage(){
             localStorage.setItem('cart', JSON.stringify(this.cart));
             localStorage.setItem('wishList', JSON.stringify(this.wishList));
             
-          },
+        },
 
-          removeItem(itemId){
-            const updatedCart = this.cart.filter(item => item.id !== itemId);
-            this.cart = updatedCart;
+        removeItem(itemId){
+                const updatedCart = this.cart.filter(item => item.id !== itemId);
+                this.cart = updatedCart;
             
-            localStorage.setItem('cart', JSON.stringify(updatedCart));
+                localStorage.setItem('cart', JSON.stringify(updatedCart));
 
-            alert("Item removed from cart");
-          },
+            // alert("Item removed from cart");
+                this.cartButtonText = 'Add to cart'
+            
+        },
 
-          removeItemFromWishList(itemId){
+        removeItemFromWishList(itemId){
             const updtedWishList = this.wishList.filter(item => item.id !== itemId);
             this.wishList = updtedWishList;
             this.isInWishList = false;
             localStorage.setItem('wishList', JSON.stringify(updtedWishList));
 
-            alert("Item removed from WishList");
-          },
+        },
 
-          cartIncreaseQuantity(itemId){
+        cartIncreaseQuantity(itemId){
             const item = this.cart.find(item => item.id === itemId);
             if(item){
                 item.quantity++;
                 this.saveToLocalStorage();
             }
-          },
+        },
 
           
-          cartDecreaseQuantity(itemId){
+        cartDecreaseQuantity(itemId){
             const item = this.cart.find(item => item.id === itemId);
             if(item && item.quantity > 1){
                 item.quantity--;
                 this.saveToLocalStorage();
             }
-          },
+        },
 
-          wishListIncreaseQuantity(itemId){
+        wishListIncreaseQuantity(itemId){
             const item = this.wishList.find(item => item.id === itemId);
             if(item){
                 item.quantity++;
                 this.saveToLocalStorage();
             }
-          },
+        },
 
-          wishListDecreaseQuantity(itemId){
+        wishListDecreaseQuantity(itemId){
             const item = this.wishList.find(item => item.id === itemId);
             if(item && item.quantity > 1){
                 item.quantity--;
                 this.saveToLocalStorage();
             }
-          },
+        },
 
-          moveToCart(item){
+        moveToCart(item){
+            
             console.log("move to crt");
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             let wishList = JSON.parse(localStorage.getItem('wishList')) || [];
 
             const existingProductInCart = cart.find(cartItem => cartItem.id === item.id);
-            
-            if(!existingProductInCart){
-                
-                cart.push(item)
+            if(existingProductInCart){
+                this.showAlertModal = true;
+                this.modalMessage = "This product is already in the cart, Do you want to update it"
+
+                this.itemToMove = item;
+              
             }else{
-                existingProductInCart.quantity += item.quantity;
+                cart.push(item);
+                this.isInWishList = false;
+                this.cartButtonText = "Added";
+
+                wishList = wishList.filter(wishListItem => wishListItem.id !== item.id);
+
+                localStorage.setItem('cart', JSON.stringify(cart));
+                localStorage.setItem('wishList', JSON.stringify(wishList));
+
+                this.cart = cart;
+                this.wishList = wishList;
+
+                
+            }     
+        },
+        confirmMoveToCart() {
+
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let wishList = JSON.parse(localStorage.getItem('wishList')) || [];
+        
+            const item = this.itemToMove;  
+            console.log("s", item);
+        
+            const existingProductInCart = cart.find(cartItem => cartItem.id === item.id);
+        
+            if (existingProductInCart) {
+
+                existingProductInCart.quantity = item.quantity;
+                wishList = wishList.filter(wishListItem => wishListItem.id !== item.id);
+        
+                localStorage.setItem('cart', JSON.stringify(cart));
+                localStorage.setItem('wishList', JSON.stringify(wishList));
+        
+                this.cart = cart;
+                this.wishList = wishList;
+        
+                this.isInWishList = false;
+                this.cartButtonText = "Added";
+        
+                this.showAlertModal = false;
+
+            } else {
+                this.showAlertModal = false;
             }
-
-            wishList = wishList.filter(wishListItem => wishListItem.id !== item.id);
-
-            localStorage.setItem('cart', JSON.stringify(cart));
-            localStorage.setItem('wishList', JSON.stringify(wishList));
+        },
+        async getSimilarProduct(){
+            console.log("info cat",this.productInfo.category);
             
-            this.cart = cart;
-            this.wishList = wishList;
-          }
-
-          
-          
-
+            try{
+                const response = await fetch(`https://dummyjson.com/products/category/${this.productInfo.category}`);
+                const data = await response.json();
+                console.log("data", data);
+                
+                // this.similarProducts = data;
+                this.similarProducts = data.products.filter(product => product.id !== this.productInfo.id);
+                console.log("Similar products:", this.similarProducts);
+                console.log("Raw similar products:", data.products);
+            }catch(error){
+                console.log("Fetching similar product", error);
+                
+            }
+        }
+        
 
     }
 }).mount('#productDetails'); 
