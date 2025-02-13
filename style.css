@@ -168,81 +168,7 @@
 
 
 
-/* .product-card {
-    margin-bottom: 1.5rem; 
-  }
-  
-  .grid-view .product-card {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .grid-view .card {
-    border-radius: 10px;
-    overflow: hidden;
-    transition: all 0.3s ease;
-  }
-  
-  .grid-view .card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .grid-view .card-body {
-    padding: 1rem;
-  }
-  
-  .grid-view .col-md-4, 
-  .grid-view .col-lg-3 {
-    display: flex;
-    justify-content: center;
-    padding: 0 0.5rem; 
-  }
-  
-  .grid-view .bg-image img {
-    max-height: 200px; 
-    object-fit: cover;
-  }
-  
-  .grid-view .card-body h5 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-  }
-  
-  .grid-view .card-body .d-flex .text-danger {
-    font-size: 0.9rem;
-  }
-  
-  .grid-view .card-body .d-flex .text-success {
-    font-size: 0.9rem;
-    font-weight: bold;
-  }
-  
-  .grid-view .btn {
-    font-size: 0.875rem;
-  }
-  
-  .grid-view .col-md-6 .card-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  
-  @media (max-width: 767px) {
-    .grid-view .col-md-4 {
-      flex: 0 0 100%; 
-    }
-  }
-  
-  .grid-view .col-md-6 {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-  
-  .grid-view .text-success, .grid-view .text-muted {
-    font-size: 0.875rem;
-  } */
-  
+
 
 
 
@@ -304,4 +230,13 @@ button.btn.wishlist-btn:hover {
   cursor: pointer;
   border: none;
 }
+.ok-btn{
+  border: none !important;
+  color: white !important;
+  background-color: #04a9f5 !important;
+}
 
+.addToWishlistBackground-fade{
+  background-color: rgba(36, 36, 36, 0.150);
+  transition: background-color 0.1s ease;
+}

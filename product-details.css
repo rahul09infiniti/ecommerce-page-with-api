@@ -110,3 +110,10 @@ position: absolute;
   cursor: pointer !important;
   background-color:#f1f1f1 !important;
 }
+
+
+/* write review (rating star), modal  */
+
+.fa-star.filled {
+  color: #ffc107;
+}

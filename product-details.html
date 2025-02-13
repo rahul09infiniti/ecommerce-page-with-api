@@ -427,22 +427,23 @@
                       <!-- Pills navs -->
                       <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
                         <li class="nav-item d-flex" role="presentation">
-                          <a class="nav-link d-flex align-items-center justify-content-center w-100 active" id="ex1-tab-1" data-bs-toggle="pill" href="#ex1-pills-1" role="tab" aria-controls="ex1-pills-1" aria-selected="flase" style="color: white; background-color: #04a9f5;">Description</a>
+                          <a :class="['nav-link', {'active' : activeTab === 1}]" @click="setActiveTab(1)" :style="activeTab === 1 ? {color: 'white', backgroundColor: '#04a9f5'} : {color: '#04a9f5', backgroundcolor: 'white' }" class="nav-link d-flex align-items-center justify-content-center w-100" id="ex1-tab-1" data-bs-toggle="pill" href="#ex1-pills-1" role="tab" aria-controls="ex1-pills-1" aria-selected="flase">Description</a>
                         </li>
                         <li class="nav-item d-flex" role="presentation">
-                          <a class="nav-link d-flex align-items-center justify-content-center w-100" id="ex1-tab-2" data-bs-toggle="pill" href="#ex1-pills-2" role="tab" aria-controls="ex1-pills-2" aria-selected="true" style="color: #04a9f5; background-color: white;">Warranty info</a>
+                          <a :class="['nav-link', {'active' : activeTab === 2}]" @click="setActiveTab(2)" :style="activeTab === 2 ? {color: 'white', backgroundColor: '#04a9f5'} : {color: '#04a9f5', backgroundcolor: 'white' }" class="nav-link d-flex align-items-center justify-content-center w-100" id="ex1-tab-4" data-bs-toggle="pill" href="#ex1-pills-4" role="tab" aria-controls="ex1-pills-4" aria-selected="false">Reviews</a>
                         </li>
                         <li class="nav-item d-flex" role="presentation">
-                          <a class="nav-link d-flex align-items-center justify-content-center w-100" id="ex1-tab-3" data-bs-toggle="pill" href="#ex1-pills-3" role="tab" aria-controls="ex1-pills-3" aria-selected="false" style="color: #04a9f5; background-color: white;">Shipping info</a>
+                          <a :class="['nav-link', {'active' : activeTab === 3}]" @click="setActiveTab(3)" :style="activeTab === 3 ? {color: 'white', backgroundColor: '#04a9f5'} : {color: '#04a9f5', backgroundcolor: 'white' }" class="nav-link d-flex align-items-center justify-content-center w-100" id="ex1-tab-2" data-bs-toggle="pill" href="#ex1-pills-2" role="tab" aria-controls="ex1-pills-2" aria-selected="true">Warranty info</a>
                         </li>
                         <li class="nav-item d-flex" role="presentation">
-                          <a class="nav-link d-flex align-items-center justify-content-center w-100" id="ex1-tab-4" data-bs-toggle="pill" href="#ex1-pills-4" role="tab" aria-controls="ex1-pills-4" aria-selected="false" style="color: #04a9f5; background-color: white;">Reviews</a>
+                          <a :class="['nav-link', {'active' : activeTab === 4}]" @click="setActiveTab(4)" :style="activeTab === 4 ? {color: 'white', backgroundColor: '#04a9f5'} : {color: '#04a9f5', backgroundcolor: 'white' }" class="nav-link d-flex align-items-center justify-content-center w-100" id="ex1-tab-3" data-bs-toggle="pill" href="#ex1-pills-3" role="tab" aria-controls="ex1-pills-3" aria-selected="false">Shipping info</a>
                         </li>
+                        
                       </ul>
                       <!-- Pills navs -->
             
                       <!-- Pills content -->
-                      <div class="tab-content" id="ex1-content">
+                      <div class="tab-content" id="ex1-content" style="overflow-y: auto; max-height: 400px;">
                         <div class="tab-pane fade show active" id="ex1-pills-1" role="tabpanel" aria-labelledby="ex1-tab-1">
                           <p>
                            {{productInfo.description}}
@@ -477,7 +478,9 @@
                         <div class="tab-pane fade" id="ex1-pills-3" role="tabpanel" aria-labelledby="ex1-tab-3">
                           <h5>{{productInfo.shippingInformation}}</h5>
                         </div>
-                        <div class="tab-pane fade" id="ex1-pills-4" role="tabpanel" aria-labelledby="ex1-tab-4">
+
+
+                        <div class="tab-pane fade" id="ex1-pills-4" style="overflow-y: auto; max-height: 400px;" role="tabpanel" aria-labelledby="ex1-tab-4">
                           <div v-for="review in productInfo.reviews" style="border-bottom: 2px solid #dee2e6; padding-bottom: 20px; margin-bottom: 20px; font-family: Arial, sans-serif; background-color: #f9f9f9; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
                               <h5 style="font-size: 1.2rem; color: #333; font-weight: bold; margin-bottom: 10px;">{{review.reviewerName}}</h5>
                               <div class="text-warning mb-1 me-2" style="font-size: 1.1rem; color: #f39c12;">
@@ -504,24 +507,93 @@
                                   }) }}</strong>
                               </p>
                           </div>
+
+                          <!-- for showing custom user review -->
+
+                          <div v-for="eachUserReview in userReviewList" style="border-bottom: 2px solid #dee2e6; padding-bottom: 20px; margin-bottom: 20px; font-family: Arial, sans-serif; background-color: #f9f9f9; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                            <h5 style="font-size: 1.2rem; color: #333; font-weight: bold; margin-bottom: 10px;">{{eachUserReview.username}}</h5>
+                            <div class="text-warning mb-1 me-2" style="font-size: 1.1rem; color: #f39c12;">
+                              <span v-for="num in Math.floor(eachUserReview.rating)" :key="'star' + num">
+                                <i class="fa fa-star"></i>
+                              </span>
+                        
+                              <span v-if="eachUserReview.rating > Math.floor(eachUserReview.rating)">
+                                <i class="fa fa-star-half-alt"></i>
+                              </span>
+                        
+                              <span class="ms-1" style="font-size: 1rem; color: #6c757d;">{{eachUserReview.rating}}</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+
+                              <p style="font-size: 1rem; line-height: 1.5; color: #555; margin-bottom: 15px;"><strong>{{eachUserReview.comment}}</strong></p>
+
+                              
+                                <i class="fa fa-edit" style="font-size:24px; margin-right: 15px;"></i>
+                              
+                            </div>
+                            <!-- <p style="font-size: 1rem; line-height: 1.5; color: #555; margin-bottom: 15px;"><strong>{{eachUserReview.comment}}</strong></p> -->
+                            
+                          </div>
+                         
+                          
+
+                          <!-- write review, modal -->
+                          
+                          <div  :class="{'background-fade': showReviewModal}" class="modal fade show" id="exampleModalreview" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h1 class="modal-title fs-5" id="exampleModalLabel">Write Review</h1>
+                                  <button type="button" class="btn-close" @click="showReviewModal = false" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                  <form>
+                                    <div class="mb-3">
+                                      <label for="recipient-name" class="col-form-label">User Name</label>
+                                      <input type="text" v-model="username" class="form-control" id="recipient-name">
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="message-text" class="col-form-label">Comment</label>
+                                      <textarea class="form-control" v-model="comment" id="message-text"></textarea>
+                                    </div>
+
+                                    <div class="mb-3" style="margin-left: 40%;">
+                                      <i v-for="star in 5" :key="star" :class="['fa', 'fa-star', {'filled' : star <= currentRating}]" @click="setRating(star)" class=" fa fa-star"></i>
+                                    </div>
+                                  </form>
+                                </div>
+                                <div class="modal-footer">
+                                  <button @click="postReview" type="button" class="btn btn-primary" style="background-color: #04a9f5; color: white; border: none;">Post Review</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalreview" style="background-color: #04a9f5; color: white; border: none;"  @click="writeReview">Write Review</button>
+                          </div> 
+                         
+
                       </div>
+                     
                       
                       </div>
                       <!-- Pills content -->
+
+                      
                     </div>
                   </div>
                   <div class="col-lg-4">
                     <div class="px-0 border rounded-2 shadow-0">
                       <h5 class="card-title"  style="font-size: 1.3rem; margin-top: 12px; margin-left: 10px; margin-bottom: 8px;" >Similar items</h5>
                       <div v-if="productInfo" class="card"  style=" max-height: 400px; overflow-y: auto;">
-                        <div v-for="simiProduct in similarProducts" :key="simiProduct.id" class="card-body p-3" style="border-bottom: 1px solid #dee2e6;" >
+                        <div v-for="simiProduct in similarProducts" :key="simiProduct.id" @click="selectProduct(simiProduct)" class="card-body p-3" style="border-bottom: 1px solid #dee2e6;" >
                           
                           <div class="similar-product d-flex mb-1">
                             <a href="#" class="me-3">
                               <img :src="simiProduct.thumbnail" style="min-width: 96px; height: 96px;  object-fit: cover; border-radius: 4px;" class="img-md img-thumbnail" />
                             </a>
                             <div class="info">
-                              <a href="#" class="similar-nav nav-link mb-1 no-hover-background" style="font-size: 1rem; font-weight: bold; color: #333;">
+                              <a @click="selectProduct(simiProduct)" href="#" class="similar-nav nav-link mb-1 no-hover-background" style="font-size: 1rem; font-weight: bold; color: #333;">
                                {{simiProduct.title}}
                                
                               </a>

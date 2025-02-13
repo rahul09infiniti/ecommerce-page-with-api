@@ -17,6 +17,8 @@ const app = Vue.createApp({
             debounceTimeout : null,
             abortController : null,
             wishListButtonText : 'Add to wishlist',
+            showAlertModal : false,
+            alreadyProductAlertModal : false,
         }
     },
      mounted(){
@@ -254,9 +256,6 @@ const app = Vue.createApp({
         // },
 
         saveToWishList(product){
-            // console.log("wishlist calling");
-            // console.log("product", product);
-            // console.log("product price", product.price);
 
             
             if(product){
@@ -270,14 +269,6 @@ const app = Vue.createApp({
                         alert("Invalid price or discount percentage");
                         return;
                     }
-
-
-                    // const discountPrice = (product.price - (product.price * product.discountPercentage / 100)).toFixed(2);
-                    // const discountPrice = product.discountPercentage
-                    // ? (product.price - (product.price * product.discountPercentage / 100)).toFixed(2)
-                    // : product.price;
-
-
 
                     const discountPrice = product.discountPercentage
                     ? (product.price - (product.price * product.discountPercentage / 100)).toFixed(2)
@@ -295,39 +286,53 @@ const app = Vue.createApp({
                         price: product.price,
                         quantity : 1
                     }
+                    // console.log("wishlist item", wishListItem);
+                    
                     wishList.push(wishListItem);
-                    this.wishList = wishList;
+                    this.showAlertModal = true;
                     // this.checkProductInWishList();
+                    // this.wishListButtonText = "Added to wishlist"
+                    this.wishList = wishList;
                    
                     localStorage.setItem('wishList', JSON.stringify(wishList));
-                    console.log("wish list product in local storage", JSON.parse(localStorage.getItem('wishList')));
+                    // console.log("wish list product in local storage", JSON.parse(localStorage.getItem('wishList')));
+                    // this.checkProductInWishList();
                     
-                    alert("Product Added in the WishList")
+                    // this.wishListButtonText = "Added to Wishlist"
+
+
+                    
+                    // alert("Product Added in the WishList")
                 }else{
-                    alert("Product is already in the WishList");
+                    this.alreadyProductAlertModal = true;
+                    // this.wishListButtonText = "Add to wishlist"
+                    // this.showAlertModal = true;
+                    // alert("Product is already in the WishList");
                 }
             }
         },
 
+
+
         // checkProductInWishList(){
+        //     console.log("check calling");
+            
             
         //         const wishList = JSON.parse(localStorage.getItem('wishList')) || [];
-        //         const existingProduct = wishList.find(item => item.id == this.product.id);
+        //         console.log("checking product", product);
+                
+        //         const existingProduct = wishList.find(item => item.id === this.product.id);
+        //         console.log("exist prod", existingProduct );
+                
     
         //         if(existingProduct){
         //             console.log("product is in wishlist", existingProduct)
         //             this.wishListButtonText = "Added to wishlist";
-        //             // this.isInWishList = true;
-        //             // console.log(this.saveButtonText)
         //         }else{
         //             this.wishListButtonText = "Add to wishlist";
-        //             // this.isInWishList = false;
         //         }
-            
-           
-        // },
 
-    
+        // },
 
     }
 

@@ -17,10 +17,17 @@ const app = Vue.createApp({
             showAlertModal: false,
             modalMessage : '',
             similarProducts : [],
+            activeTab : 1,
+            showReviewModal : false,
+            currentRating : 0,
+            userReviewList : [],
+            // clickSimilarToGetProduct : false,
         }
     },
 
     mounted(){
+        this.loadReviewFirst();
+
         const urlParams = new URLSearchParams(window.location.search);
         this.productId = urlParams.get('id');
 
@@ -52,6 +59,9 @@ const app = Vue.createApp({
     },
 
     methods:{
+ 
+
+
         async fetchProductDetails(){
             if(!this.productId) 
                 return;
@@ -65,6 +75,7 @@ const app = Vue.createApp({
                 
                 this.checkProductInCartForAdded();
                 this.checkProductInWishList();
+                this.postReview();
 
                 console.log('fetched product', this.productInfo);
                 
@@ -423,6 +434,9 @@ const app = Vue.createApp({
                 this.showAlertModal = false;
             }
         },
+        setActiveTab(currentActiveTab){
+            this.activeTab = currentActiveTab;
+        },
         async getSimilarProduct(){
             console.log("info cat",this.productInfo.category);
             
@@ -438,6 +452,51 @@ const app = Vue.createApp({
             }catch(error){
                 console.log("Fetching similar product", error);
                 
+            }
+        },
+        selectProduct(product){
+            this.productInfo = product;
+        },
+        writeReview(){
+            console.log("clling write review");
+            
+            this.showReviewModal = true;
+        },
+        setRating(star){
+            this.currentRating = star;
+        },
+
+        loadReviewFirst(){
+            const savedUserReviews = JSON.parse(localStorage.getItem('review'));
+            console.log("saved user",savedUserReviews);
+            
+            if(savedUserReviews){
+                this.userReviewList = savedUserReviews;
+            }
+        },
+
+        postReview(){
+            if(this.username && this.comment && this.currentRating > 0){
+                const userReview = {
+                    username : this.username,
+                    comment : this.comment,
+                    rating : this.currentRating,
+                    date: new Date() 
+                };
+                this.userReviewList.push(userReview)
+                localStorage.setItem('review', JSON.stringify(this.userReviewList));
+
+               
+                
+
+                this.username = '';
+                this.comment = '';
+                this.currentRating = 0;
+
+                this.showReviewModal = false;
+                // alert("Review posted successfully")
+            }else{
+                // alert("fill the input filled")
             }
         }
         

@@ -260,6 +260,45 @@
                               <button @click="goToProductDetails(product.id)" class="btn btn-primary btn-sm" type="button" style="background-color: #04a9f5; border: none;">Details</button>
                               <button @click="saveToWishList(product)" class="wishlist-btn btn btn-outline-primary btn-sm mt-2" type="button">{{wishListButtonText}}</button>
                             </div>
+
+                            <!-- wishlist alert modal -->
+                            <div v-show="showAlertModal"  :class="{'addToWishlistBackground-fade': showAlertModal}" class=" background-overlay modal fade show" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: block;">
+                              <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                                    <button type="button" class="btn-close" @click="showAlertModal = false" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <p><strong>Product Added in the WishList</strong></p>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="ok-btn btn btn-primary" @click="showAlertModal = false">Ok</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+
+
+                            <div v-show="alreadyProductAlertModal"  :class="{'addToWishlistBackground-fade': alreadyProductAlertModal}" class=" background-overlay modal fade show" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: block;">
+                              <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                                    <button type="button" class="btn-close" @click="alreadyProductAlertModal = false" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <p><strong>Product is already in the Wishlist</strong></p>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="ok-btn btn btn-primary" @click="alreadyProductAlertModal = false">Ok</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+
                         
                           </div>
                         </div>
