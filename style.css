@@ -240,3 +240,25 @@ button.btn.wishlist-btn:hover {
   background-color: rgba(36, 36, 36, 0.150);
   transition: background-color 0.1s ease;
 }
+
+button.checkout{
+  border: none;
+  background-color: #04a9f5 !important;
+} 
+
+
+.background-fade {
+  background-color: rgba(65, 65, 65, 0.513); /* Semi-transparent */
+  transition: background-color 0.3s ease;
+}
+
+
+.sticky-header{
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 10 !important; 
+  background-color: white !important;
+  width: 100% !important;
+}

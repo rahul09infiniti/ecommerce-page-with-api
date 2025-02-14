@@ -26,12 +26,14 @@ const app = Vue.createApp({
     },
 
     mounted(){
-        this.loadReviewFirst();
+       
 
         const urlParams = new URLSearchParams(window.location.search);
         this.productId = urlParams.get('id');
 
         console.log('Product ID from URL:', this.productId);
+
+        this.loadReviewFirst();
 
         this.fetchProductDetails();
         this.loadCartFromLocalStorage();
@@ -75,7 +77,7 @@ const app = Vue.createApp({
                 
                 this.checkProductInCartForAdded();
                 this.checkProductInWishList();
-                this.postReview();
+                // this.postReview();
 
                 console.log('fetched product', this.productInfo);
                 
@@ -437,6 +439,7 @@ const app = Vue.createApp({
         setActiveTab(currentActiveTab){
             this.activeTab = currentActiveTab;
         },
+
         async getSimilarProduct(){
             console.log("info cat",this.productInfo.category);
             
@@ -447,6 +450,7 @@ const app = Vue.createApp({
                 
                 // this.similarProducts = data;
                 this.similarProducts = data.products.filter(product => product.id !== this.productInfo.id);
+
                 console.log("Similar products:", this.similarProducts);
                 console.log("Raw similar products:", data.products);
             }catch(error){
@@ -454,9 +458,21 @@ const app = Vue.createApp({
                 
             }
         },
+
+        selectSimilarProduct(product){
+            this.selectProduct(product);
+        },
+
         selectProduct(product){
             this.productInfo = product;
+            this.productId = product.id;
+            console.log("Selected product ID: ", this.productId);
+
+            // fetching the new product  details and reviews
+            this.fetchProductDetails();
+            this.loadReviewFirst(); 
         },
+
         writeReview(){
             console.log("clling write review");
             
@@ -467,11 +483,13 @@ const app = Vue.createApp({
         },
 
         loadReviewFirst(){
-            const savedUserReviews = JSON.parse(localStorage.getItem('review'));
+            const savedUserReviews = JSON.parse(localStorage.getItem('reviews_' + this.productId));
             console.log("saved user",savedUserReviews);
             
             if(savedUserReviews){
                 this.userReviewList = savedUserReviews;
+            }else{
+                userReviewList = [];
             }
         },
 
@@ -483,16 +501,22 @@ const app = Vue.createApp({
                     rating : this.currentRating,
                     date: new Date() 
                 };
-                this.userReviewList.push(userReview)
-                localStorage.setItem('review', JSON.stringify(this.userReviewList));
 
-               
-                
-
+                let productReview = JSON.parse(localStorage.getItem('reviews_' + this.productId)) || [];
+                productReview.push(userReview);
+            
+                // Save the new review to localStorage
+                localStorage.setItem('reviews_' + this.productId, JSON.stringify(productReview));
+            
+                // Update the reviews list
+                this.userReviewList = productReview;
+            
+                // Clear the form fields
                 this.username = '';
                 this.comment = '';
                 this.currentRating = 0;
-
+            
+                // Close the modal
                 this.showReviewModal = false;
                 // alert("Review posted successfully")
             }else{
