@@ -1,6 +1,13 @@
 const app = Vue.createApp({
     data(){
         return{
+            enteredEmail : '',
+            enteredUsername : '',
+            enteredPassword : '',
+            enteredConfirmPassword : '',
+            currentusername : this.getUsernameFromStorage(),
+            isLoggedIn : false,
+            
             showSignLoginModal : false,
             showCreateAccountModal : false,
             enteredProductTitle : '',
@@ -53,6 +60,7 @@ const app = Vue.createApp({
      mounted(){
         this.allProducts();
         this.getCategory();
+        this. checkLoginState();
         
 
 
@@ -100,7 +108,91 @@ const app = Vue.createApp({
         createAccount(){
             this.showCreateAccountModal = true;
         },
+        createNewUserAccount(){
+            if(this.enteredEmail && this.enteredUsername && this.enteredPassword && this.enteredConfirmPassword){
+                if(this.enteredPassword === this.enteredConfirmPassword){
 
+                    const newUser = {
+                        email : this.enteredEmail,
+                        username : this.enteredUsername,
+                        password : this.enteredPassword,
+                        // confirmPassword : this.enteredConfirmPassword
+                    };
+                    const createdUser = JSON.parse(localStorage.getItem('newUser')) || [];
+
+                    const userExist = createdUser.find(user => user.email === this.enteredEmail);
+                    if(userExist){
+                        alert("This email is already registered");
+                        return;
+                    }
+
+                    createdUser.push(newUser);
+                    localStorage.setItem('newUser', JSON.stringify(createdUser));
+                    this.isLoggedIn = true;
+                    this.currentUsername = this.enteredUsername; 
+
+                    
+                    localStorage.setItem('currentUsername', this.enteredUsername);
+
+                    alert("account created successfully");
+
+
+                    this.showCreateAccountModal = false;
+                    this.showSignLoginModal = false;
+                }else{
+                    alert("password not matched")
+                }
+            }else{
+                alert("fill all the field")
+            }
+            
+        },
+        getUsernameFromStorage(){
+            const storedUsername = localStorage.getItem('currentUsername');
+            return storedUsername ? storedUsername : 'guest';
+        },
+
+        loginUser(){
+            
+            const enteredEmail = this.enteredEmail;
+            const enteredPassword = this.enteredPassword;
+
+            const createdUser = JSON.parse(localStorage.getItem('newUser')) || [];
+
+            const user = createdUser.find(user => user.email === enteredEmail);
+            if(user){
+                if(user.password === enteredPassword){
+                   
+
+                    localStorage.setItem('currentUsername', user.username);
+                    this.currentUsername = user.username;
+                    this.isLoggedIn = true;
+                    this.showSignLoginModal = false;
+                    alert("login successfully");
+                }else{
+                    alert("incorrect password!")
+                }
+            }else{
+                alert("user not found")
+            }
+        },
+        signOut(){
+            this.currentUsername = '';
+            this.isLoggedIn = false;
+            localStorage.removeItem('currentUsername'); 
+            alert("user logged out successfully")
+        },
+
+        checkLoginState(){
+            const storedUsername = localStorage.getItem('currentUsername');
+            if (storedUsername) {
+                this.isLoggedIn = true;
+                this.currentUsername = storedUsername;
+            } else {
+                this.isLoggedIn = false;
+                this.currentUsername = 'guest';
+            }
+        },
         async allProducts(){
             
             try{
