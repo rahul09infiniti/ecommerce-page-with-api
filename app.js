@@ -61,6 +61,7 @@ const app = Vue.createApp({
         this.allProducts();
         this.getCategory();
         this. checkLoginState();
+        this.getUsernameFromStorage()
         
 
 

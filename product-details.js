@@ -40,13 +40,14 @@ const app = Vue.createApp({
         this. checkLoginState();
         const urlParams = new URLSearchParams(window.location.search);
         this.productId = urlParams.get('id');
-
+        
         console.log('Product ID from URL:', this.productId);
+        this.loadCartFromLocalStorage();
 
         this.loadReviewFirst();
 
         this.fetchProductDetails();
-        this.loadCartFromLocalStorage();
+        
        
     },
 
@@ -313,7 +314,7 @@ const app = Vue.createApp({
             }
 
             const wishListData = JSON.parse(localStorage.getItem('wishList'));
-            if(wishListData.length > 0) {
+            if(wishListData && Array.isArray(wishListData) &&  wishListData.length > 0) {
                 this.wishList = wishListData;
                 console.log("wishlistDAta");
                 console.log( this.wishList);
@@ -612,9 +613,9 @@ const app = Vue.createApp({
                 this.userReviewList = productReview;
             
                 // Clear the form fields
-                this.username = '';
-                this.comment = '';
-                this.currentRating = 0;
+                // this.username = '';
+                // this.comment = '';
+                // this.currentRating = 0;
             
                 // Close the modal
                 this.showReviewModal = false;
@@ -622,7 +623,8 @@ const app = Vue.createApp({
             }else{
                 // alert("fill the input filled")
             }
-        }
+        },
+        
         
 
     }
