@@ -43,8 +43,9 @@ const app = Vue.createApp({
         
         console.log('Product ID from URL:', this.productId);
         this.loadCartFromLocalStorage();
-
         this.loadReviewFirst();
+
+        
 
         this.fetchProductDetails();
         
@@ -148,7 +149,7 @@ const app = Vue.createApp({
             }
         },
         signOut(){
-            this.currentUsername = '';
+            this.currentUsername = 'guest';
             this.isLoggedIn = false;
             localStorage.removeItem('currentUsername'); 
             alert("user logged out successfully")
